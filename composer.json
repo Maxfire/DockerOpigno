@@ -1,0 +1,6 @@
+{
+    "require": {
+        "rusticisoftware/tincan": "@stable",
+        "drush/drush": "^9.6"
+    }
+}
