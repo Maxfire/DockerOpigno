@@ -1,0 +1,56 @@
+# Drupal 8
+
+version: '2'
+
+services:
+
+  opigno:
+    build: .
+    ports:
+      - 8080:80
+    restart: always
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_DATABASE: local_drupal
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    restart: on-failure
+    command: mysqld --max_allowed_packet=64M
+    volumes_from:
+      - dbfiles
+    volumes:
+      - ./assets/mysql:/etc/mysql/conf.d
+      - ./logs/mysql:/var/log/mysql/
+
+  dbfiles:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+
+  solr:
+    image: solr:7.7
+    ports:
+      - "8983:8983"
+    environment:
+      - SOLR_HOME=/mysolrhome
+    volumes_from:
+      - solrfiles
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - msconnect
+    links:
+      - db
+    restart: on-failure
+    labels:
+      traefik.frontend.rule: "Host:solr.localhost"
+      traefik.port: "8983"
+
+  solrfiles:
+    image: busybox
+    volumes:
+      - ./mysolrhome:/mysolrhome
