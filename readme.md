@@ -1,4 +1,4 @@
-# Basic Docker distribution Opigno 8.x-1.3
+# Basic Docker distribution Opigno LMS 2.2
 
 To install it just run:
 
@@ -18,7 +18,7 @@ And install TinCanPHP via Composer:
 composer require rusticisoftware/tincan:@stable
 ```
 
-Follow the instructions and that's it!
+Follow the instructions and that's it!, easy right?.
 
 NOTE: db set up:
 * database name `local_drupal`;
